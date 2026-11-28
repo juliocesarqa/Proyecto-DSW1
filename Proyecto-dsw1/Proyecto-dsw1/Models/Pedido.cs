@@ -39,5 +39,7 @@ namespace Proyecto_dsw1.Models
         [Required(ErrorMessage = "La fecha del pedido es obligatoria")]
         [Display(Name = "Fecha de compra")]
         public DateTime fechaPedido { get; set; } = DateTime.Now;
+        public DireccionEnvio? direccionEnvio { get; set; }
+        public Usuario? usuario { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Proyecto_dsw1.Models
         [Required(ErrorMessage = "El método de pago es obligatorio")]
         [StringLength(30, ErrorMessage = "El método no puede superar los 30 caracteres")]
         [Display(Name = "Método de pago")]
-        public string metodoPago { get; set; } 
+        public string metodoPago { get; set; }
 
         [StringLength(60, ErrorMessage = "El código de transacción no puede superar los 60 caracteres")]
         [Display(Name = "Código de operación")]
@@ -29,10 +29,12 @@ namespace Proyecto_dsw1.Models
         [Required(ErrorMessage = "El estado del pago es obligatorio")]
         [StringLength(20, ErrorMessage = "El estado no puede superar los 20 caracteres")]
         [Display(Name = "Estado del pago")]
-        public string estadoPago { get; set; } = "Completado";
+        public string estadoPago { get; set; } = "Pendiente";
 
         [Required(ErrorMessage = "La fecha de pago es obligatoria")]
         [Display(Name = "Fecha de pago")]
         public DateTime fechaPago { get; set; } = DateTime.Now;
+
+        public Pedido? pedido { get; set; }
     }
 }

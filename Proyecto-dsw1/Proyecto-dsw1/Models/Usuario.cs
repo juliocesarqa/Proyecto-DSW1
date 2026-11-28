@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Proyecto_dsw1.Models
 {
@@ -34,9 +35,10 @@ namespace Proyecto_dsw1.Models
         public DateTime fechaNacimiento { get; set; }
 
         [Required(ErrorMessage = "El rol es obligatorio")]
-        [StringLength(20, ErrorMessage = "El rol no puede superar los 20 caracteres")]
         [Display(Name = "Rol del usuario")]
-        public string rol { get; set; } = "Cliente"; // Cliente | Administrador
+        public int RolId { get; set; }
+        [ForeignKey("RolId")]
+        public Rol? Rol { get; set; }
 
         [Required(ErrorMessage = "La fecha es obligatoria")]
         [Display(Name = "Fecha de registro")]

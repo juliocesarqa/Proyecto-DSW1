@@ -79,7 +79,6 @@ namespace Proyecto_dsw1.Controllers
                 .GetRequiredService<Proyecto_dsw1.Data.AppDbContext>();
 
             context.Entry(existente).CurrentValues.SetValues(entidad);
-
             await context.SaveChangesAsync();
 
             return Ok(new

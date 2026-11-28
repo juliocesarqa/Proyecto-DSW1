@@ -22,6 +22,32 @@ namespace Proyecto_dsw1.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Proyecto_dsw1.Models.Categoria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("descripcion")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("requiereMayoriaEdad")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categoria");
+                });
+
             modelBuilder.Entity("Proyecto_dsw1.Models.DetallePedido", b =>
                 {
                     b.Property<int>("Id")
@@ -46,6 +72,10 @@ namespace Proyecto_dsw1.Migrations
                         .HasColumnType("decimal(10, 2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("pedidoId");
+
+                    b.HasIndex("productoId");
 
                     b.ToTable("DetallePedido");
                 });
@@ -82,6 +112,8 @@ namespace Proyecto_dsw1.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("usuarioId");
 
                     b.ToTable("DireccionEnvio");
                 });
@@ -120,6 +152,8 @@ namespace Proyecto_dsw1.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("pedidoId");
+
                     b.ToTable("Pago");
                 });
 
@@ -157,6 +191,10 @@ namespace Proyecto_dsw1.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("direccionEnvioId");
+
+                    b.HasIndex("usuarioId");
 
                     b.ToTable("Pedido");
                 });
@@ -211,7 +249,39 @@ namespace Proyecto_dsw1.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("categoriaId");
+
                     b.ToTable("Producto");
+                });
+
+            modelBuilder.Entity("Proyecto_dsw1.Models.Rol", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rol");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Nombre = "Administrador"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Nombre = "Cliente"
+                        });
                 });
 
             modelBuilder.Entity("Proyecto_dsw1.Models.Usuario", b =>
@@ -221,6 +291,12 @@ namespace Proyecto_dsw1.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("RolId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RolId1")
+                        .HasColumnType("int");
 
                     b.Property<string>("clave")
                         .IsRequired()
@@ -248,14 +324,104 @@ namespace Proyecto_dsw1.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("rol")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.HasKey("Id");
 
+                    b.HasIndex("RolId");
+
+                    b.HasIndex("RolId1");
+
                     b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("Proyecto_dsw1.Models.DetallePedido", b =>
+                {
+                    b.HasOne("Proyecto_dsw1.Models.Pedido", "pedido")
+                        .WithMany()
+                        .HasForeignKey("pedidoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Proyecto_dsw1.Models.Producto", "producto")
+                        .WithMany()
+                        .HasForeignKey("productoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("pedido");
+
+                    b.Navigation("producto");
+                });
+
+            modelBuilder.Entity("Proyecto_dsw1.Models.DireccionEnvio", b =>
+                {
+                    b.HasOne("Proyecto_dsw1.Models.Usuario", "usuario")
+                        .WithMany()
+                        .HasForeignKey("usuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("usuario");
+                });
+
+            modelBuilder.Entity("Proyecto_dsw1.Models.Pago", b =>
+                {
+                    b.HasOne("Proyecto_dsw1.Models.Pedido", "pedido")
+                        .WithMany()
+                        .HasForeignKey("pedidoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("pedido");
+                });
+
+            modelBuilder.Entity("Proyecto_dsw1.Models.Pedido", b =>
+                {
+                    b.HasOne("Proyecto_dsw1.Models.DireccionEnvio", "direccionEnvio")
+                        .WithMany()
+                        .HasForeignKey("direccionEnvioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Proyecto_dsw1.Models.Usuario", "usuario")
+                        .WithMany()
+                        .HasForeignKey("usuarioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("direccionEnvio");
+
+                    b.Navigation("usuario");
+                });
+
+            modelBuilder.Entity("Proyecto_dsw1.Models.Producto", b =>
+                {
+                    b.HasOne("Proyecto_dsw1.Models.Categoria", "categoria")
+                        .WithMany()
+                        .HasForeignKey("categoriaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("categoria");
+                });
+
+            modelBuilder.Entity("Proyecto_dsw1.Models.Usuario", b =>
+                {
+                    b.HasOne("Proyecto_dsw1.Models.Rol", "Rol")
+                        .WithMany()
+                        .HasForeignKey("RolId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Proyecto_dsw1.Models.Rol", null)
+                        .WithMany("Usuarios")
+                        .HasForeignKey("RolId1");
+
+                    b.Navigation("Rol");
+                });
+
+            modelBuilder.Entity("Proyecto_dsw1.Models.Rol", b =>
+                {
+                    b.Navigation("Usuarios");
                 });
 #pragma warning restore 612, 618
         }

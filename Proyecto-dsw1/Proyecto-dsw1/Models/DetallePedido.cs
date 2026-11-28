@@ -31,5 +31,8 @@ namespace Proyecto_dsw1.Models
         [Column(TypeName = "decimal(10, 2)")]
         [Display(Name = "Subtotal")]
         public decimal subtotal { get; set; }
+
+        public Pedido? pedido { get; set; }
+        public Producto? producto { get; set; }
     }
 }

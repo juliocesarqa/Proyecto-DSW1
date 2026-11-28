@@ -51,7 +51,7 @@ namespace Proyecto_dsw1.Controllers
                 correo = correo,
                 documentoIdentidad = dto.documentoIdentidad.Trim(),
                 fechaNacimiento = dto.fechaNacimiento,
-                rol = "Cliente",
+                RolId = 2,
                 fechaRegistro = DateTime.Now
             };
 
@@ -67,7 +67,7 @@ namespace Proyecto_dsw1.Controllers
                 usuario.Id,
                 usuario.nombre,
                 usuario.correo,
-                usuario.rol
+                usuario.RolId
             });
         }
     }

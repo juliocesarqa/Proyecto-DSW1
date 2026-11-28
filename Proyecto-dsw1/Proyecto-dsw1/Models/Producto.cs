@@ -52,5 +52,7 @@ namespace Proyecto_dsw1.Models
         [Required(ErrorMessage = "La fecha de creación es obligatoria")]
         [Display(Name = "Fecha de registro")]
         public DateTime fechaRegistro { get; set; } = DateTime.Now;
+
+        public Categoria? categoria { get; set; }
     }
 }

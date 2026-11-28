@@ -29,5 +29,6 @@ namespace Proyecto_dsw1.Models
         [Phone(ErrorMessage = "Formato de teléfono inválido")]
         [Display(Name = "Teléfono de contacto")]
         public string telefono { get; set; }
+        public Usuario? usuario { get; set; }
     }
 }
